@@ -1,0 +1,56 @@
+@if (authService.isLoggedIn()) {
+  <nav class="navbar" id="main-navbar">
+    <div class="navbar-container">
+      <!-- Logo / Brand -->
+      <a routerLink="/dashboard" class="navbar-brand" id="navbar-brand" (click)="closeMobileMenu()">
+        <span class="material-icons-round brand-icon">account_balance_wallet</span>
+        <span class="brand-text">SmartExpense</span>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <div class="navbar-links" [class.mobile-open]="mobileMenuOpen" id="navbar-links">
+        <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+           class="nav-link" id="nav-dashboard" (click)="closeMobileMenu()">
+          <span class="material-icons-round">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+        <a routerLink="/add-expense" routerLinkActive="active"
+           class="nav-link" id="nav-add-expense" (click)="closeMobileMenu()">
+          <span class="material-icons-round">add_circle</span>
+          <span>Add Transaction</span>
+        </a>
+        <a routerLink="/transactions" routerLinkActive="active"
+           class="nav-link" id="nav-transactions" (click)="closeMobileMenu()">
+          <span class="material-icons-round">receipt_long</span>
+          <span>Transactions</span>
+        </a>
+        <a routerLink="/borrow-lend" routerLinkActive="active"
+           class="nav-link" id="nav-borrow-lend" (click)="closeMobileMenu()">
+          <span class="material-icons-round">handshake</span>
+          <span>Borrow / Lend</span>
+        </a>
+      </div>
+
+      <!-- Right Side: Theme Toggle + Logout -->
+      <div class="navbar-actions">
+        <button class="theme-toggle-btn" id="theme-toggle" (click)="toggleTheme()" title="Toggle theme">
+          <span class="material-icons-round">
+            {{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}
+          </span>
+        </button>
+        <button class="logout-btn" id="logout-btn" (click)="logout()">
+          <span class="material-icons-round">logout</span>
+          <span class="logout-text">Logout</span>
+        </button>
+
+        <!-- Mobile Hamburger -->
+        <button class="hamburger" id="hamburger-btn" (click)="toggleMobileMenu()"
+                [class.open]="mobileMenuOpen">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+}

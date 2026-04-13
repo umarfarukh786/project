@@ -1,0 +1,8 @@
+.main-content {
+  min-height: 100vh;
+  transition: background-color 0.3s ease;
+  
+  &.has-navbar {
+    padding-top: 70px; // navbar height
+  }
+}

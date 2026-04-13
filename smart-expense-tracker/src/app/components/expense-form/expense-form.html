@@ -1,0 +1,116 @@
+<div class="expense-form-page" id="expense-form-page">
+  <div class="page-header">
+    <h1 class="page-title">Add Transaction</h1>
+    <p class="page-subtitle">Record a new income or expense</p>
+  </div>
+
+  <div class="form-card glass-card">
+    <form (ngSubmit)="onSubmit()" id="expense-form">
+
+      <!-- Transaction Type Selector -->
+      <div class="type-selector" id="type-selector">
+        <button
+          type="button"
+          class="type-btn"
+          [class.active]="type === 'income'"
+          [class.income-active]="type === 'income'"
+          (click)="type = 'income'"
+          id="type-income"
+        >
+          <span class="material-icons-round">trending_up</span>
+          Income
+        </button>
+        <button
+          type="button"
+          class="type-btn"
+          [class.active]="type === 'expense'"
+          [class.expense-active]="type === 'expense'"
+          (click)="type = 'expense'"
+          id="type-expense"
+        >
+          <span class="material-icons-round">trending_down</span>
+          Expense
+        </button>
+      </div>
+
+      <!-- Title -->
+      <div class="form-group" [class.has-error]="titleError">
+        <label for="expense-title" class="form-label">
+          <span class="material-icons-round">title</span>
+          Title
+        </label>
+        <input
+          type="text"
+          id="expense-title"
+          class="form-input"
+          placeholder="e.g., Salary, Groceries, Rent..."
+          [(ngModel)]="title"
+          name="title"
+          (blur)="titleTouched = true"
+        />
+        @if (titleError) {
+          <span class="form-error">{{ titleError }}</span>
+        }
+      </div>
+
+      <!-- Amount -->
+      <div class="form-group" [class.has-error]="amountError">
+        <label for="expense-amount" class="form-label">
+          <span class="material-icons-round">attach_money</span>
+          Amount
+        </label>
+        <div class="amount-wrapper">
+          <span class="currency-symbol">₹</span>
+          <input
+            type="number"
+            id="expense-amount"
+            class="form-input amount-input"
+            placeholder="0.00"
+            [(ngModel)]="amount"
+            name="amount"
+            (blur)="amountTouched = true"
+            min="0.01"
+            step="0.01"
+          />
+        </div>
+        @if (amountError) {
+          <span class="form-error">{{ amountError }}</span>
+        }
+      </div>
+
+      <!-- Date -->
+      <div class="form-group">
+        <label for="expense-date" class="form-label">
+          <span class="material-icons-round">calendar_today</span>
+          Date
+        </label>
+        <input
+          type="date"
+          id="expense-date"
+          class="form-input"
+          [(ngModel)]="date"
+          name="date"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="submit-btn"
+        id="expense-submit"
+        [disabled]="isSubmitting"
+        [class.loading]="isSubmitting"
+        [class.income-btn]="type === 'income'"
+        [class.expense-btn]="type === 'expense'"
+      >
+        @if (isSubmitting) {
+          <span class="spinner"></span>
+          <span>Adding...</span>
+        } @else {
+          <span class="material-icons-round">add_circle</span>
+          <span>Add {{ type === 'income' ? 'Income' : 'Expense' }}</span>
+        }
+      </button>
+    </form>
+  </div>
+</div>

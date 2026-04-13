@@ -1,0 +1,78 @@
+<div class="transactions-page" id="transactions-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">All Transactions</h1>
+      <p class="page-subtitle">
+        {{ (filteredTransactions$ | async)?.length || 0 }} transaction{{ ((filteredTransactions$ | async)?.length || 0) !== 1 ? 's' : '' }} found
+      </p>
+    </div>
+    <a routerLink="/add-expense" class="add-btn" id="add-from-list">
+      <span class="material-icons-round">add</span>
+      Add New
+    </a>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-row">
+    <!-- Search -->
+    <div class="search-bar">
+      <span class="material-icons-round search-icon">search</span>
+      <input
+        type="text"
+        placeholder="Search by title..."
+        class="search-input"
+        id="search-all-transactions"
+        (input)="onSearchInput($event)"
+      />
+    </div>
+
+    <!-- Type Filter -->
+    <div class="filter-chips" id="filter-chips">
+      <button class="chip" [class.active]="(filterType$ | async) === 'all'" (click)="setFilter('all')">All</button>
+      <button class="chip chip-income" [class.active]="(filterType$ | async) === 'income'" (click)="setFilter('income')">
+        <span class="material-icons-round">trending_up</span> Income
+      </button>
+      <button class="chip chip-expense" [class.active]="(filterType$ | async) === 'expense'" (click)="setFilter('expense')">
+        <span class="material-icons-round">trending_down</span> Expense
+      </button>
+    </div>
+  </div>
+
+  <!-- Transaction List -->
+  @if (((filteredTransactions$ | async)?.length || 0) > 0) {
+    <div class="transaction-list glass-card">
+      @for (t of (filteredTransactions$ | async); track t.id) {
+        <div class="transaction-item" id="txn-{{ t.id }}">
+          <div class="transaction-icon" [class.income]="t.type === 'income'" [class.expense]="t.type === 'expense'">
+            <span class="material-icons-round">
+              {{ t.type === 'income' ? 'arrow_downward' : 'arrow_upward' }}
+            </span>
+          </div>
+          <div class="transaction-details">
+            <span class="transaction-title">{{ t.title }}</span>
+            <span class="transaction-date">{{ t.date | date:'mediumDate' }}</span>
+          </div>
+          <span class="transaction-type-badge" [class.income]="t.type === 'income'" [class.expense]="t.type === 'expense'">
+            {{ t.type }}
+          </span>
+          <div class="transaction-amount" [class.income]="t.type === 'income'" [class.expense]="t.type === 'expense'">
+            {{ t.type === 'income' ? '+' : '-' }}{{ t.amount | currency:'INR':'symbol':'1.0-0' }}
+          </div>
+          <button class="delete-btn" (click)="deleteTransaction(t.id)" title="Delete" id="del-{{ t.id }}">
+            <span class="material-icons-round">delete_outline</span>
+          </button>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="empty-state glass-card">
+      <span class="material-icons-round">inbox</span>
+      <h3>No transactions found</h3>
+      <p>Try adjusting your search or filters, or add your first transaction.</p>
+      <a routerLink="/add-expense" class="empty-cta">
+        <span class="material-icons-round">add_circle</span>
+        Add Transaction
+      </a>
+    </div>
+  }
+</div>

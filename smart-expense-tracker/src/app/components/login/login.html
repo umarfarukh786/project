@@ -1,0 +1,282 @@
+<div class="login-page" id="login-page">
+
+  <!-- Ambient background blobs -->
+  <div class="ambient-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- Welcome Popup -->
+  @if (showWelcomePopup) {
+    <div class="welcome-popup" id="welcome-popup">
+      <span class="material-icons-round">account_balance_wallet</span>
+      <span>Welcome to Smart Expense Tracker 💚</span>
+      <button class="popup-close" (click)="showWelcomePopup = false">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+  }
+
+  <!-- ═══ LEFT PANEL — Laptop Illustration ═══ -->
+  <div class="left-panel">
+
+    <div class="panel-tagline">
+      <h2>Your finances,<br><span>intelligently tracked.</span></h2>
+      <p>Real-time insights. Zero guesswork.</p>
+    </div>
+
+    <div class="laptop-wrap">
+      <div class="laptop">
+
+        <!-- Screen -->
+        <div class="laptop-screen">
+          <div class="dashboard-screen">
+
+            <!-- Header -->
+            <div class="dash-header">
+              <div class="dash-brand">
+                <span class="dash-dot"></span>
+                SMART EXPENSE TRACKER
+              </div>
+              <span class="dash-date">Apr 2026</span>
+            </div>
+
+            <!-- Stat Cards -->
+            <div class="dash-stats">
+              <div class="dash-stat balance">
+                <div class="stat-label">Balance</div>
+                <div class="stat-value">$12,840</div>
+                <div class="stat-change">↑ 8.2%</div>
+              </div>
+              <div class="dash-stat">
+                <div class="stat-label">Income</div>
+                <div class="stat-value">$5,200</div>
+                <div class="stat-change">↑ 3.1%</div>
+              </div>
+              <div class="dash-stat negative">
+                <div class="stat-label">Expenses</div>
+                <div class="stat-value">$2,360</div>
+                <div class="stat-change">↓ 1.4%</div>
+              </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="dash-charts">
+              <!-- Bar chart -->
+              <div class="bar-chart">
+                <div class="chart-title">Monthly Overview</div>
+                <div class="bars">
+                  <div class="bar-item">
+                    <div class="bar-fill" style="height: 55%"></div>
+                    <span class="bar-label">Nov</span>
+                  </div>
+                  <div class="bar-item">
+                    <div class="bar-fill" style="height: 72%"></div>
+                    <span class="bar-label">Dec</span>
+                  </div>
+                  <div class="bar-item">
+                    <div class="bar-fill" style="height: 48%"></div>
+                    <span class="bar-label">Jan</span>
+                  </div>
+                  <div class="bar-item">
+                    <div class="bar-fill" style="height: 86%"></div>
+                    <span class="bar-label">Feb</span>
+                  </div>
+                  <div class="bar-item">
+                    <div class="bar-fill" style="height: 63%"></div>
+                    <span class="bar-label">Mar</span>
+                  </div>
+                  <div class="bar-item">
+                    <div class="bar-fill" style="height: 92%"></div>
+                    <span class="bar-label">Apr</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Donut chart -->
+              <div class="donut-chart">
+                <div class="chart-title">Split</div>
+                <svg class="donut-svg" viewBox="0 0 36 36">
+                  <circle class="donut-track" cx="18" cy="18" r="18"/>
+                  <circle class="donut-seg-1"  cx="18" cy="18" r="18"/>
+                  <circle class="donut-seg-2"  cx="18" cy="18" r="18"/>
+                  <circle class="donut-seg-3"  cx="18" cy="18" r="18"/>
+                </svg>
+                <div class="donut-legend">
+                  <div class="legend-item">
+                    <div class="legend-dot" style="background:#00d4b4"></div>
+                    <span>Food 48%</span>
+                  </div>
+                  <div class="legend-item">
+                    <div class="legend-dot" style="background:#3b8bff"></div>
+                    <span>Bills 27%</span>
+                  </div>
+                  <div class="legend-item">
+                    <div class="legend-dot" style="background:#7c6bff"></div>
+                    <span>Other 7%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Transactions -->
+            <div class="dash-transactions">
+              <div class="tx-title">Recent</div>
+              <div class="tx-row">
+                <div class="tx-icon">🛒</div>
+                <div class="tx-info">
+                  <div class="tx-name">Groceries</div>
+                  <div class="tx-date">Apr 10</div>
+                </div>
+                <div class="tx-amount neg">-$84</div>
+              </div>
+              <div class="tx-row">
+                <div class="tx-icon">💼</div>
+                <div class="tx-info">
+                  <div class="tx-name">Salary</div>
+                  <div class="tx-date">Apr 1</div>
+                </div>
+                <div class="tx-amount pos">+$5,200</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Base / Hinge -->
+        <div class="laptop-base"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT PANEL — Login Form ═══ -->
+  <div class="right-panel">
+    <div class="login-card-wrapper">
+      <div class="login-card" id="login-card">
+
+        <!-- Logo -->
+        <div class="login-logo">
+          <div class="logo-icon-wrap">
+            <span class="material-icons-round">account_balance_wallet</span>
+          </div>
+          <h1 class="logo-title">
+            {{ isLoginMode ? 'Welcome Back' : 'Create Account' }}
+          </h1>
+          <p class="logo-subtitle">Smart Expense Tracker &mdash; Take control of your money.</p>
+        </div>
+
+        <!-- Form -->
+        <form (ngSubmit)="onSubmit()" id="login-form">
+
+          <!-- Email -->
+          <div class="form-group" [class.has-error]="emailError">
+            <label for="login-email" class="form-label">
+              <span class="material-icons-round">email</span>
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="login-email"
+              class="form-input"
+              placeholder="you@example.com"
+              [(ngModel)]="email"
+              name="email"
+              (blur)="emailTouched = true"
+              autocomplete="email"
+            />
+            @if (emailError) {
+              <span class="form-error">{{ emailError }}</span>
+            }
+          </div>
+
+          <!-- Password -->
+          <div class="form-group" [class.has-error]="passwordError">
+            <label for="login-password" class="form-label">
+              <span class="material-icons-round">lock</span>
+              Password
+            </label>
+            <div class="password-wrapper">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="login-password"
+                class="form-input"
+                placeholder="Enter your password"
+                [(ngModel)]="password"
+                name="password"
+                (blur)="passwordTouched = true"
+                autocomplete="current-password"
+              />
+              <button type="button" class="password-toggle" (click)="togglePassword()" id="password-toggle">
+                <span class="material-icons-round">
+                  {{ showPassword ? 'visibility_off' : 'visibility' }}
+                </span>
+              </button>
+            </div>
+            @if (passwordError) {
+              <span class="form-error">{{ passwordError }}</span>
+            }
+          </div>
+
+          <!-- Avatar (register) / Options (login) -->
+          @if (!isLoginMode) {
+            <div class="avatar-selection">
+              <label class="form-label">Choose your avatar</label>
+              <div class="avatar-grid">
+                @for (avatar of avatars; track avatar) {
+                  <button type="button" class="avatar-btn"
+                          [class.selected]="selectedAvatar === avatar"
+                          (click)="selectedAvatar = avatar">
+                    <span class="material-icons-round">{{ avatar }}</span>
+                  </button>
+                }
+              </div>
+            </div>
+          } @else {
+            <div class="login-options">
+              <label class="remember-me">
+                <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe" class="remember-checkbox" />
+                <span class="custom-checkbox"></span>
+                <span>Remember me</span>
+              </label>
+              <a href="javascript:void(0)" class="forgot-password">Forgot Password?</a>
+            </div>
+          }
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            class="login-btn"
+            id="login-submit"
+            [disabled]="isLoading"
+            [class.loading]="isLoading"
+          >
+            @if (isLoading) {
+              <span class="spinner"></span>
+              <span>{{ isLoginMode ? 'Signing in...' : 'Signing up...' }}</span>
+            } @else {
+              <span class="material-icons-round">{{ isLoginMode ? 'login' : 'person_add' }}</span>
+              <span>{{ isLoginMode ? 'Sign In' : 'Sign Up' }}</span>
+            }
+          </button>
+
+          <!-- Hint -->
+          <p class="login-hint">
+            <span class="material-icons-round">info</span>
+            Use any valid email and password (6+ chars)
+          </p>
+
+          <!-- Toggle -->
+          <div class="auth-switch">
+            <span>{{ isLoginMode ? "Don't have an account?" : "Already have an account?" }}</span>
+            <button type="button" class="switch-btn" (click)="toggleMode()">
+              {{ isLoginMode ? 'Sign Up' : 'Sign In' }}
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+</div>

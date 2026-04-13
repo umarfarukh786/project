@@ -1,0 +1,90 @@
+<div class="borrow-lend-page" id="borrow-lend-page">
+  <div class="page-header">
+    <h1 class="page-title">Borrow / Lend Tracker</h1>
+    <p class="page-subtitle">Keep track of money you owe or are owed</p>
+  </div>
+
+  <div class="content-grid">
+    <!-- Form Section -->
+    <div class="form-section glass-card">
+      <h2 class="section-title">Add New Record</h2>
+      <form (ngSubmit)="onSubmit()" id="loan-form">
+        
+        <!-- Type Selection -->
+        <div class="type-selector">
+          <button type="button" class="type-btn" [class.active-lent]="type === 'lent'" (click)="type = 'lent'">
+            <span class="material-icons-round">arrow_upward</span> Lent Money
+          </button>
+          <button type="button" class="type-btn" [class.active-borrowed]="type === 'borrowed'" (click)="type = 'borrowed'">
+            <span class="material-icons-round">arrow_downward</span> Borrowed Money
+          </button>
+        </div>
+
+        <div class="form-group" [class.has-error]="personError">
+          <label class="form-label">Person Name</label>
+          <input type="text" class="form-input" placeholder="Enter name" [(ngModel)]="personName" name="personName" (blur)="personNameTouched = true" />
+          @if(personError) { <span class="form-error">{{ personError }}</span> }
+        </div>
+
+        <div class="form-group" [class.has-error]="amountError">
+          <label class="form-label">Amount</label>
+          <div class="amount-wrapper">
+            <span class="currency-symbol">₹</span>
+            <input type="number" class="form-input amount-input" placeholder="0" [(ngModel)]="amount" name="amount" (blur)="amountTouched = true" min="1" />
+          </div>
+          @if(amountError) { <span class="form-error">{{ amountError }}</span> }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Repayment Date</label>
+          <input type="date" class="form-input" [(ngModel)]="repaymentDate" name="repaymentDate" />
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="isSubmitting" [class.loading]="isSubmitting">
+          @if(isSubmitting) {
+            <span class="spinner"></span> Adding...
+          } @else {
+            <span class="material-icons-round">add_circle</span> Add Record
+          }
+        </button>
+      </form>
+    </div>
+
+    <!-- Records List -->
+    <div class="records-section glass-card">
+      <h2 class="section-title">Stored Records</h2>
+      @if ((loans$ | async)?.length) {
+        <div class="records-list">
+          @for (loan of (loans$ | async); track loan.id) {
+            <div class="record-card" [class.completed]="loan.status === 'completed'">
+              <div class="record-header">
+                <span class="record-type" [class]="loan.type">
+                  {{ loan.type === 'lent' ? 'You Lent' : 'You Borrowed' }}
+                </span>
+                <button class="status-btn" [class]="loan.status" (click)="toggleStatus(loan.id, loan.status)" title="Toggle Status">
+                  {{ loan.status | uppercase }}
+                </button>
+              </div>
+              <div class="record-body">
+                <h3>{{ loan.personName }}</h3>
+                <p class="amount">₹{{ loan.amount | number:'1.0-0' }}</p>
+                <div class="date-info">
+                  <span class="material-icons-round">event</span>
+                  Repayment: {{ loan.repaymentDate | date:'mediumDate' }}
+                </div>
+              </div>
+              <button class="delete-btn" (click)="deleteLoan(loan.id)" title="Delete Record">
+                <span class="material-icons-round">delete_outline</span>
+              </button>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <span class="material-icons-round">account_balance_wallet</span>
+          <p>No records found. You're all settled up!</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

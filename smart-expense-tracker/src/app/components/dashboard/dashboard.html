@@ -1,0 +1,137 @@
+<div class="dashboard-page" id="dashboard-page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle">Your financial overview at a glance</p>
+    </div>
+    <a routerLink="/add-expense" class="add-btn" id="add-transaction-shortcut">
+      <span class="material-icons-round">add</span>
+      Add Transaction
+    </a>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <!-- Balance Card -->
+    <div class="summary-card balance-card" id="balance-card" [class.pulse-balance]="pulseBalance">
+      <div class="card-icon-wrapper balance-icon">
+        <span class="material-icons-round">account_balance</span>
+      </div>
+      <div class="card-info">
+        <span class="card-label">Total Balance</span>
+        <span class="card-value" [class.negative]="((balance$ | async) ?? 0) < 0">
+          {{ (balance$ | async) | currency:'INR':'symbol':'1.0-0' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Income Card -->
+    <div class="summary-card income-card" id="income-card" [class.pulse-green]="pulseIncome">
+      <div class="card-icon-wrapper income-icon">
+        <span class="material-icons-round">trending_up</span>
+      </div>
+      <div class="card-info">
+        <span class="card-label">Total Income</span>
+        <span class="card-value income-value">
+          {{ (totalIncome$ | async) | currency:'INR':'symbol':'1.0-0' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Expense Card -->
+    <div class="summary-card expense-card" id="expense-card" [class.pulse-red]="pulseExpense">
+      <div class="card-icon-wrapper expense-icon">
+        <span class="material-icons-round">trending_down</span>
+      </div>
+      <div class="card-info">
+        <span class="card-label">Total Expenses</span>
+        <span class="card-value expense-value">
+          {{ (totalExpense$ | async) | currency:'INR':'symbol':'1.0-0' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart + Transactions Section -->
+  <div class="content-grid">
+
+    <!-- Chart Section -->
+    <div class="chart-section glass-card" id="chart-section">
+      <h2 class="section-title">
+        <span class="material-icons-round">donut_large</span>
+        Income vs Expense
+      </h2>
+      <div class="chart-wrapper">
+        @if (((totalIncome$ | async) ?? 0) > 0 || ((totalExpense$ | async) ?? 0) > 0) {
+          <canvas baseChart
+            [data]="chartData"
+            [options]="chartOptions"
+            type="doughnut"
+            id="expense-chart">
+          </canvas>
+        } @else {
+          <div class="empty-chart">
+            <span class="material-icons-round">pie_chart</span>
+            <p>No data to display yet</p>
+            <a routerLink="/add-expense" class="empty-cta">Add your first transaction</a>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="transactions-section glass-card" id="recent-transactions">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="material-icons-round">receipt_long</span>
+          Recent Transactions
+        </h2>
+        <a routerLink="/transactions" class="view-all-link">View All →</a>
+      </div>
+
+      <!-- Search -->
+      <div class="search-bar">
+        <span class="material-icons-round search-icon">search</span>
+        <input
+          type="text"
+          placeholder="Search transactions..."
+          class="search-input"
+          id="search-transactions"
+          (input)="onSearchInput($event)"
+        />
+      </div>
+
+      <!-- Transaction List -->
+      @if (((filteredTransactions$ | async)?.length ?? 0) > 0) {
+        <div class="transaction-list">
+          @for (t of (filteredTransactions$ | async); track t.id) {
+            <div class="transaction-item" id="transaction-{{ t.id }}">
+              <div class="transaction-icon" [class.income]="t.type === 'income'" [class.expense]="t.type === 'expense'">
+                <span class="material-icons-round">
+                  {{ t.type === 'income' ? 'arrow_downward' : 'arrow_upward' }}
+                </span>
+              </div>
+              <div class="transaction-details">
+                <span class="transaction-title">{{ t.title }}</span>
+                <span class="transaction-date">{{ t.date | date:'mediumDate' }}</span>
+              </div>
+              <div class="transaction-amount" [class.income]="t.type === 'income'" [class.expense]="t.type === 'expense'">
+                {{ t.type === 'income' ? '+' : '-' }}{{ t.amount | currency:'INR':'symbol':'1.0-0' }}
+              </div>
+              <button class="delete-btn" (click)="deleteTransaction(t.id)" title="Delete" id="delete-{{ t.id }}">
+                <span class="material-icons-round">delete_outline</span>
+              </button>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-transactions">
+          <span class="material-icons-round">inbox</span>
+          <p>No transactions found</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>
